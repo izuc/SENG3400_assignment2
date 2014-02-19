@@ -1,0 +1,91 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Student name: Lance Baker 
+// Course: SENG3400 (Network & Distributed Computing)
+// Student number: c3128034
+// Assignment title: SENG3400 Assignment 2 
+// File name: MyCEAdmin.jws
+// Created: 12-09-2010
+// Last Change: 12-09-2010
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import javax.xml.namespace.QName;
+import java.net.URL;
+
+public class MyCEAdmin {
+	private static final String SERVER_SERVICE = "http://localhost:8080/axis/ce/MyCEServer.jws";
+	private static final String METHOD_SET_CURRENCY = "setCurrency";
+	private static final String METHOD_GET_CALLCOUNT = "getCallCount";
+	
+	private static final String USER_NAME = "admin";
+	private static final String USER_PASSWORD = "currency";
+	private static int callCount;
+	
+	public MyCEAdmin() {
+		callCount++; // The service has been invoked; therefore the counter is incremented.
+	}
+	
+	// Adds a new currency to the System with the exchange rate relative to AUD.
+	// Returns false if the denomination already existed, or the user credentials are invalid.
+	// Returns true if the new donomination has been updated.
+	public boolean addCurr(String user, String pwd, String denom, double rate) {
+		return setCurrency(user, pwd, denom, rate, true);
+	}
+	
+	// Updates the exchange rate for the specified currency denominator.
+	// Returns false if the denomination does not exist or if the user credentials are invalid.
+	// Returns true if the denomination exists and has been updated.
+	public boolean setRate(String user, String pwd, String denom, double rate) {
+		return setCurrency(user, pwd, denom, rate, false);
+	}
+	
+	
+	public int callCount(String user, String pwd) {
+		if (validateLogin(user, pwd)) { // Validates the user credentials.
+			// If the user credentials are valid, then it sends a callCount request to the MyCEServer service
+			// which returns its total number of calls. The sendRequest response is outputted to a Object,
+			// that is narrowed down to a Integer (which is due to make the sendRequest method more generic).
+			Object response = sendRequest(METHOD_GET_CALLCOUNT, new Object[] {});
+			// Returns a integer value of this services callCount, plus the callCount of the MyCEServer service.
+			return (callCount + ((response != null) ? Integer.parseInt(response.toString()) : 0));
+		}
+		return -1; // Returns -1 if the user credentials are invalid.
+	}
+	
+	// The following method is used to validate the administrators user credentials.
+	private static boolean validateLogin(String user, String password) {
+		// The following just compares the received credentials with hardcoded values.
+		// If they match, then it returns boolean true - otherwise false.
+		return (user.equals(USER_NAME) && password.equals(USER_PASSWORD));
+	}
+	
+	// The setCurrency method is used by addCurr, and the setRate methods.
+	// Since both requests are similar (in order to stop redundant code) a boolean value (addCurrency) is received
+	// which specifies the method purpose (addCurr being true, and setRate being false).
+	private static boolean setCurrency(String user, String pwd, String denom, double rate, boolean addCurrency) {
+		if (validateLogin(user, pwd)) { // validates whether the user credentials are valid.
+			// Sends the request to the MyCEServer service which invokes a the setCurrency method (passing the received arguments in an Object array).
+			// The sendRequest method returns a generic Object, which is narrowed down to just a Boolean value and outputted accordingly.
+			Object response = sendRequest(METHOD_SET_CURRENCY, new Object[] { new String(denom), new Double(rate), new Boolean(addCurrency)});
+			// Checks whether the response was not null, and if its not then it casts to boolean.
+			// Otherwise if null, it returns false.
+			return ((response != null)? (((Boolean) response).booleanValue()) : false);
+		}
+		return false; // Returns false if user credentials are invalid.
+	}
+	
+	// The sendRequest method is used to communicate with the counterpart MyCEServer service.
+	// The method is used by the setCurrency, and callCount method - therefore it is generic.
+	// Returns a Object, and receives the method to be invoked - plus a Object array of arguments to be forwarded.
+	private static Object sendRequest(String method, Object[] args) {
+		try {
+			Service service = new Service(); // Creates a Service Object.
+			Call call = (Call)service.createCall(); // Creates a Call Object.
+			call.setTargetEndpointAddress(new URL(SERVER_SERVICE)); // Sets the target of the Call to the MyCEServer service location.
+			call.setOperationName(new QName(method)); // Sets the Call Object to invoke the corresponding method.
+			return call.invoke(args); // Passes the received Object[] arguments, and returns the value from service method the invocation.
+		} catch (Exception ex) {} // Exception caught (probably the method or received args are wrong).
+		return null; // Returns null if an exception was caught.
+	}
+}

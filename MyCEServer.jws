@@ -1,0 +1,102 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Student name: Lance Baker 
+// Course: SENG3400 (Network & Distributed Computing)
+// Student number: c3128034
+// Assignment title: SENG3400 Assignment 2 
+// File name: MyCEServer.jws
+// Created: 12-09-2010
+// Last Change: 12-09-2010
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+import java.util.HashMap;
+import java.lang.StringBuffer;
+import java.util.Iterator;
+import java.text.DecimalFormat;
+
+public class MyCEServer {
+	private static final String SPACE = " ";
+	private static final String EQUALS = " = ";
+	private static final String NEW_LINE = "\n";
+	private static final String ERR = "ERR: ";
+	private static final String ERR_CURRENCY_NOT_FOUND = ERR + "currency not found";
+	private static final String ERR_CURRENCY_UNSUPPORTED = ERR + "from currency unsupported";
+	private static final String CURRENCY_AUD = "AUD";
+	private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+	
+	private static HashMap<String, Double> currencies = new HashMap<String, Double>();
+	private static int callCount;
+		
+	public MyCEServer() {
+		// Adds the currencies into memory
+		if (currencies.size() == 0) {
+			currencies.put("USD", 0.8859);
+			currencies.put("EUR", 0.6966);
+			currencies.put("GBP", 0.5706);
+			currencies.put("YPN", 74.8273);
+		}
+		callCount++; // The service has been invoked; therefore the counter is incremented.
+	}
+	
+	// Returns a double representing the exchange rate relative to AUD for the provided currency.
+	public double currentRate(String currency) {
+		if (currencies.containsKey(currency)) { // Checks whether the requested currency exists.
+			return currencies.get(currency); // Returns the currency rate stored in the hashmap.
+		}
+		return -1; // Returns -1 if the currency doesn't exist.
+	}
+	
+	// Returns a String containing the currently supported currencies, separated by “\n”.
+	public String listCurrencies() {
+		// Since strings are immutable objects; the StringBuffer enables a more efficient way to store concatenated values temporarily
+		// without causing too many string objects to be discarded in memory.
+		StringBuffer output = new StringBuffer();
+		Iterator iterator = currencies.keySet().iterator();  // Grabs the Iterator of the hashMap keySet.
+		while(iterator.hasNext()) { // Iterates for each key
+			String key = (String)iterator.next(); // Grabs the key value.
+			// The currency rate is grabbed from the hashmap based on the key value.
+			// Appends the formatted output to the StringBuffer - being separated with a new line.
+			output.append(key + SPACE + currencies.get(key) + NEW_LINE);
+		}
+		return output.toString(); // Returns the String of the StringBuffer.
+	}
+	
+	// Returns a String representing how much amount in the from currency is worth in the to
+	// currency (with all values rounded to 2 decimal places). Amount may be any valid positive
+	// double. An example of output is:
+	// 10.50 AUD = 7.31 EUR
+	
+	//
+	public String convert(String from, String to, double amount) {
+		if (from.equals(CURRENCY_AUD)) { // The currency can only support AUD conversions.
+			if (currencies.containsKey(to)) { // Checks whether the currency exists.
+				double converted = amount * currencies.get(to); // Converts the AUD currency value.
+				// Returns the formatted output.
+				return decimalFormat.format(amount) + SPACE + from.toUpperCase() + EQUALS + decimalFormat.format(converted) + SPACE + to.toUpperCase();
+			}
+			return ERR_CURRENCY_NOT_FOUND; // The currency could not be found.
+		} else {
+			// The from currency is something other than AUD.
+			return ERR_CURRENCY_UNSUPPORTED;
+		}
+	}
+	
+	public static boolean setCurrency(String denom, double rate, boolean addCurrency) {
+		callCount--; // Deducts one - due to this request not being a service call.
+		// If the received addCurrency boolean is true, then the request is to add a new currency;
+		// therefore it can only be added if the currency does not exist.
+		// Otherwise, if the addCurrency is false - then the request is to update the existing currency value;
+		// therefore it has to exist in order to be updated.
+		if ((addCurrency && (!currencies.containsKey(denom)))
+			|| ((!addCurrency) && (currencies.containsKey(denom)))) {
+			currencies.put(denom, rate); // Adds a new currency, or updates the existing currency value.
+			return true; // Indicates the currency has been updated.
+		}
+		return false; // The currency either exists, or doesn't exist (depending on the criteria mentioned above)
+	}
+	
+	// The getCallCount() method returns the counter request value; which is used to keep a count of the requests made to the service.
+	public static int getCallCount() {
+		callCount--; // Deducts one - due to this request not being a service call.
+		return callCount; // Returns the counter.
+	}
+}

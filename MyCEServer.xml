@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://localhost:8080/axis/ce/MyCEServer.jws" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://localhost:8080/axis/ce/MyCEServer.jws" xmlns:intf="http://localhost:8080/axis/ce/MyCEServer.jws" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+
+   <wsdl:message name="convertRequest">
+
+      <wsdl:part name="from" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="to" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="amount" type="xsd:double">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="currentRateRequest">
+
+      <wsdl:part name="currency" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCurrencyRequest">
+
+      <wsdl:part name="denom" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="rate" type="xsd:double">
+
+      </wsdl:part>
+
+      <wsdl:part name="addCurrency" type="xsd:boolean">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="currentRateResponse">
+
+      <wsdl:part name="currentRateReturn" type="xsd:double">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCallCountRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="listCurrenciesResponse">
+
+      <wsdl:part name="listCurrenciesReturn" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setCurrencyResponse">
+
+      <wsdl:part name="setCurrencyReturn" type="xsd:boolean">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="listCurrenciesRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getCallCountResponse">
+
+      <wsdl:part name="getCallCountReturn" type="xsd:int">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="convertResponse">
+
+      <wsdl:part name="convertReturn" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="MyCEServer">
+
+      <wsdl:operation name="getCallCount">
+
+         <wsdl:input message="impl:getCallCountRequest" name="getCallCountRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getCallCountResponse" name="getCallCountResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="currentRate" parameterOrder="currency">
+
+         <wsdl:input message="impl:currentRateRequest" name="currentRateRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:currentRateResponse" name="currentRateResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listCurrencies">
+
+         <wsdl:input message="impl:listCurrenciesRequest" name="listCurrenciesRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:listCurrenciesResponse" name="listCurrenciesResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCurrency" parameterOrder="denom rate addCurrency">
+
+         <wsdl:input message="impl:setCurrencyRequest" name="setCurrencyRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setCurrencyResponse" name="setCurrencyResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="convert" parameterOrder="from to amount">
+
+         <wsdl:input message="impl:convertRequest" name="convertRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:convertResponse" name="convertResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="MyCEServerSoapBinding" type="impl:MyCEServer">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getCallCount">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCallCountRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCallCountResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEServer.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="currentRate">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="currentRateRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="currentRateResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEServer.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listCurrencies">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listCurrenciesRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listCurrenciesResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEServer.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setCurrency">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setCurrencyRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setCurrencyResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEServer.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="convert">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="convertRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="convertResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEServer.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="MyCEServerService">
+
+      <wsdl:port binding="impl:MyCEServerSoapBinding" name="MyCEServer">
+
+         <wsdlsoap:address location="http://localhost:8080/axis/ce/MyCEServer.jws"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

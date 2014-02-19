@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://localhost:8080/axis/ce/MyCEAdmin.jws" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://localhost:8080/axis/ce/MyCEAdmin.jws" xmlns:intf="http://localhost:8080/axis/ce/MyCEAdmin.jws" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+
+   <wsdl:message name="callCountResponse">
+
+      <wsdl:part name="callCountReturn" type="xsd:int">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setRateResponse">
+
+      <wsdl:part name="setRateReturn" type="xsd:boolean">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="callCountRequest">
+
+      <wsdl:part name="user" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="pwd" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="addCurrRequest">
+
+      <wsdl:part name="user" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="pwd" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="denom" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="rate" type="xsd:double">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setRateRequest">
+
+      <wsdl:part name="user" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="pwd" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="denom" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="rate" type="xsd:double">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="addCurrResponse">
+
+      <wsdl:part name="addCurrReturn" type="xsd:boolean">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="MyCEAdmin">
+
+      <wsdl:operation name="callCount" parameterOrder="user pwd">
+
+         <wsdl:input message="impl:callCountRequest" name="callCountRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:callCountResponse" name="callCountResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addCurr" parameterOrder="user pwd denom rate">
+
+         <wsdl:input message="impl:addCurrRequest" name="addCurrRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:addCurrResponse" name="addCurrResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setRate" parameterOrder="user pwd denom rate">
+
+         <wsdl:input message="impl:setRateRequest" name="setRateRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setRateResponse" name="setRateResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="MyCEAdminSoapBinding" type="impl:MyCEAdmin">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="callCount">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="callCountRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="callCountResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEAdmin.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addCurr">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addCurrRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addCurrResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEAdmin.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setRate">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setRateRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://DefaultNamespace" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setRateResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://localhost:8080/axis/ce/MyCEAdmin.jws" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="MyCEAdminService">
+
+      <wsdl:port binding="impl:MyCEAdminSoapBinding" name="MyCEAdmin">
+
+         <wsdlsoap:address location="http://localhost:8080/axis/ce/MyCEAdmin.jws"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
